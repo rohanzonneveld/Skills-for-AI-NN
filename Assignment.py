@@ -8,3 +8,4 @@ A = np.array([[0, 0, 1, 0, 0,],
 print(A)
 
 O = np.array([0],[1])
+print('Test of Github nu goed werkt')
