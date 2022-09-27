@@ -1,0 +1,2 @@
+# Skills for AI NN
+ 
