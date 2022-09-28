@@ -70,11 +70,27 @@ O1=[]
 O2=[]
 O3=[]
 O4=[]
-S=[]
-S1=[]
-S2=[]
-S3=[]
-S4=[]
+S=[[1, 1, 1, 1, 1],
+   [1, 0, 0, 0, 0],
+   [1, 1, 1, 1, 1],
+   [0, 0, 0, 0, 1],
+   [1, 1, 1, 1, 1]]
+
+S1=[[0.5, 1, 1, 1, 1],
+    [0.5, 0, 0, 0, 0],
+    [0.5, 1, 1, 1, 1],
+    [0, 0, 0, 0, 1],
+    [0.5, 1, 1, 1, 1]]
+
+S2=np.matmul(S1, blur)
+
+S3=[[0.90, 0.87, 0.88, 0.9, 0.80],
+    [0.88, 0.08, 0.1, 0.03, 0.05],
+    [0.90, 0.88, 0.92, 1.0, 0.78],
+    [0.05, 0.04, 0.03, 0.06, 0.96],
+    [0.90, 0.79, 0.88, 0.92, 0.95]]
+
+S4=np.matmul(S3, blur)
 
 # 3.
 # Make a correlation matrix for your inputs (12 x 12 matrix) by taking inproducts between all input values. How similar are your inputs to each other? Explain from the correlation matrix which two characters are
