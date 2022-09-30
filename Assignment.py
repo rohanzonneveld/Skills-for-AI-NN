@@ -164,9 +164,8 @@ letters_list = [A,A1,A2,A3,A4,O,O1,O2,O3,O4,S,S1,S2,S3,S4]
 for letter in letters_list:
     max = 0
     for i in range(3):
-        value = np.sum(np.multiply(letter,NN2[i]))
+        value = np.sum(np.multiply(normalize(letter),normalize(NN2[i])))
         if value > max:
             max = value
             idx = i
     print('Deze letter is een: ' + answers_list[idx])
-
