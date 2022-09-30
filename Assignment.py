@@ -1,4 +1,5 @@
 import numpy as np
+import math
 
 def create_matrix(
         size):  # first we need a function that creates empty matrices of the size we want (np.empty is not readable)
@@ -28,6 +29,9 @@ def create_blur_matrix(size):
 
         return blurred_matrix
 
+def normalize(matrix):
+    len=math.sqrt(np.sum(np.multiply(matrix,matrix)))
+    return np.multiply((1/len),matrix)
 
 # 1.
 # Define three characters from your own name, and draw them in a 5x5 matrix. E.g.if you name is Sieuwert,
