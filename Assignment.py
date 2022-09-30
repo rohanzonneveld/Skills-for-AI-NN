@@ -31,7 +31,10 @@ def create_blur_matrix(size):
 
 def normalize(matrix):
     len=math.sqrt(np.vdot(matrix,matrix))
+    if len == 0:
+        len = 1
     return np.multiply((1/len),matrix)
+
 
 # 1.
 # Define three characters from your own name, and draw them in a 5x5 matrix. E.g.if you name is Sieuwert,
@@ -78,38 +81,38 @@ A4=normalize(np.matmul(A3,blur))
 O=normalize(
     np.array(
     [[1, 1, 1, 1, 1],
-   [1, 0, 0, 0, 1],
-   [1, 0, 0, 0, 1],
-   [1, 0, 0, 0, 1],
-   [1, 1, 1, 1, 1]]))
+[1, 0, 0, 0, 1],
+[1, 0, 0, 0, 1],
+[1, 0, 0, 0, 1],
+[1, 1, 1, 1, 1]]))
 
 O1=normalize(
     np.array(
     [[0.5, 1, 1, 1, 1],
-   [0.5, 0, 0, 0, 0],
-   [1, 0, 0, 0, 0.5],
-   [1, 0, 0, 0, 0.5],
-   [1, 1, 1, 0.5, 1]]))
+[0.5, 0, 0, 0, 0],
+[1, 0, 0, 0, 0.5],
+[1, 0, 0, 0, 0.5],
+[1, 1, 1, 0.5, 1]]))
 
 O2 = normalize(np.matmul(O1,blur))
 
 O3 = normalize(
     np.array(
     [[1, 0.9, 0.8, 0.75, 0.75],
-      [0.95, 0.04, 0.01, 0, 0.87],
-      [0.89, 0.01, 0, 0.02, 0.93],
-      [0.86, 0.10, 0, 0.01, 0.99],
-      [0.98, 0.97, 0.84, 0.82, 1]]))
+    [0.95, 0.04, 0.01, 0, 0.87],
+    [0.89, 0.01, 0, 0.02, 0.93],
+    [0.86, 0.10, 0, 0.01, 0.99],
+    [0.98, 0.97, 0.84, 0.82, 1]]))
 
 O4 = normalize(np.matmul(O3,blur))
 
 S=normalize(
     np.array(
     [[1, 1, 1, 1, 1],
-   [1, 0, 0, 0, 0],
-   [1, 1, 1, 1, 1],
-   [0, 0, 0, 0, 1],
-   [1, 1, 1, 1, 1]]))
+[1, 0, 0, 0, 0],
+[1, 1, 1, 1, 1],
+[0, 0, 0, 0, 1],
+[1, 1, 1, 1, 1]]))
 
 S1=normalize(
     np.array(
@@ -132,56 +135,85 @@ S3=normalize(
 S4=normalize(np.matmul(S3, blur))
 
 letters_list = [A,A1,A2,A3,A4,O,O1,O2,O3,O4,S,S1,S2,S3,S4]
-
 # Make a correlation matrix for your inputs (12 x 12 matrix) by taking inproducts between all input values. How similar are your inputs to each other? Explain from the correlation matrix which two characters are
 # most likely to be confused.
 
-correlation=[[np.vdot(A1,A1), np.vdot(A1,A2),np.vdot(A1,A3), np.vdot(A1,A4),np.vdot(A1,O1), np.vdot(A1,O2),np.vdot(A1,O3), np.vdot(A1,O4),np.vdot(A1,S1), np.vdot(A1,S2),np.vdot(A1,S3), np.vdot(A1,S4)],
-            [np.vdot(A2,A1), np.vdot(A2,A2),np.vdot(A2,A3), np.vdot(A2,A4),np.vdot(A2,O1), np.vdot(A2,O2),np.vdot(A2,O3), np.vdot(A2,O4),np.vdot(A2,S1), np.vdot(A2,S2),np.vdot(A2,S3), np.vdot(A2,S4)],
-            [np.vdot(A3,A1), np.vdot(A3,A2),np.vdot(A3,A3), np.vdot(A3,A4),np.vdot(A3,O1), np.vdot(A3,O2),np.vdot(A3,O3), np.vdot(A3,O4),np.vdot(A3,S1), np.vdot(A3,S2),np.vdot(A3,S3), np.vdot(A3,S4)],
-            [np.vdot(A4,A1), np.vdot(A4,A2),np.vdot(A4,A3), np.vdot(A4,A4),np.vdot(A4,O1), np.vdot(A4,O2),np.vdot(A4,O3), np.vdot(A4,O4),np.vdot(A4,S1), np.vdot(A4,S2),np.vdot(A4,S3), np.vdot(A4,S4)],
-            [np.vdot(O1,A1), np.vdot(O1,A2),np.vdot(O1,A3), np.vdot(O1,A4),np.vdot(O1,O1), np.vdot(O1,O2),np.vdot(O1,O3), np.vdot(O1,O4),np.vdot(O1,S1), np.vdot(O1,S2),np.vdot(O1,S3), np.vdot(O1,S4)],
-            [np.vdot(O2,A1), np.vdot(O2,A2),np.vdot(O2,A3), np.vdot(O2,A4),np.vdot(O2,O1), np.vdot(O2,O2),np.vdot(O2,O3), np.vdot(O2,O4),np.vdot(O2,S1), np.vdot(O2,S2),np.vdot(O2,S3), np.vdot(O2,S4)],
-            [np.vdot(O3,A1), np.vdot(O3,A2),np.vdot(O3,A3), np.vdot(O3,A4),np.vdot(O3,O1), np.vdot(O3,O2),np.vdot(O3,O3), np.vdot(O3,O4),np.vdot(O3,S1), np.vdot(O3,S2),np.vdot(O3,S3), np.vdot(O3,S4)],
-            [np.vdot(O4,A1), np.vdot(O4,A2),np.vdot(O4,A3), np.vdot(O4,A4),np.vdot(O4,O1), np.vdot(O4,O2),np.vdot(O4,O3), np.vdot(O4,O4),np.vdot(O4,S1), np.vdot(O4,S2),np.vdot(O4,S3), np.vdot(O4,S4)],
-            [np.vdot(S1,A1), np.vdot(S1,A2),np.vdot(S1,A3), np.vdot(S1,A4),np.vdot(S1,O1), np.vdot(S1,O2),np.vdot(S1,O3), np.vdot(S1,O4),np.vdot(S1,S1), np.vdot(S1,S2),np.vdot(S1,S3), np.vdot(S1,S4)],
-            [np.vdot(S2,A1), np.vdot(S2,A2),np.vdot(S2,A3), np.vdot(S2,A4),np.vdot(S2,O1), np.vdot(S2,O2),np.vdot(S2,O3), np.vdot(S2,O4),np.vdot(S2,S1), np.vdot(S2,S2),np.vdot(S2,S3), np.vdot(S2,S4)],
-            [np.vdot(S3,A1), np.vdot(S3,A2),np.vdot(S3,A3), np.vdot(S3,A4),np.vdot(S3,O1), np.vdot(S3,O2),np.vdot(S3,O3), np.vdot(S3,O4),np.vdot(S3,S1), np.vdot(S3,S2),np.vdot(S3,S3), np.vdot(S3,S4)],
-            [np.vdot(S4,A1), np.vdot(S4,A2),np.vdot(S4,A3), np.vdot(S4,A4),np.vdot(S4,O1), np.vdot(S4,O2),np.vdot(S4,O3), np.vdot(S4,O4),np.vdot(S4,S1), np.vdot(S4,S2),np.vdot(S4,S3), np.vdot(S4,S4)]]
+# correlation=[[np.vdot(A1,A1), np.vdot(A1,A2),np.vdot(A1,A3), np.vdot(A1,A4),np.vdot(A1,O1), np.vdot(A1,O2),np.vdot(A1,O3), np.vdot(A1,O4),np.vdot(A1,S1), np.vdot(A1,S2),np.vdot(A1,S3), np.vdot(A1,S4)],
+#             [np.vdot(A2,A1), np.vdot(A2,A2),np.vdot(A2,A3), np.vdot(A2,A4),np.vdot(A2,O1), np.vdot(A2,O2),np.vdot(A2,O3), np.vdot(A2,O4),np.vdot(A2,S1), np.vdot(A2,S2),np.vdot(A2,S3), np.vdot(A2,S4)],
+#             [np.vdot(A3,A1), np.vdot(A3,A2),np.vdot(A3,A3), np.vdot(A3,A4),np.vdot(A3,O1), np.vdot(A3,O2),np.vdot(A3,O3), np.vdot(A3,O4),np.vdot(A3,S1), np.vdot(A3,S2),np.vdot(A3,S3), np.vdot(A3,S4)],
+#             [np.vdot(A4,A1), np.vdot(A4,A2),np.vdot(A4,A3), np.vdot(A4,A4),np.vdot(A4,O1), np.vdot(A4,O2),np.vdot(A4,O3), np.vdot(A4,O4),np.vdot(A4,S1), np.vdot(A4,S2),np.vdot(A4,S3), np.vdot(A4,S4)],
+#             [np.vdot(O1,A1), np.vdot(O1,A2),np.vdot(O1,A3), np.vdot(O1,A4),np.vdot(O1,O1), np.vdot(O1,O2),np.vdot(O1,O3), np.vdot(O1,O4),np.vdot(O1,S1), np.vdot(O1,S2),np.vdot(O1,S3), np.vdot(O1,S4)],
+#             [np.vdot(O2,A1), np.vdot(O2,A2),np.vdot(O2,A3), np.vdot(O2,A4),np.vdot(O2,O1), np.vdot(O2,O2),np.vdot(O2,O3), np.vdot(O2,O4),np.vdot(O2,S1), np.vdot(O2,S2),np.vdot(O2,S3), np.vdot(O2,S4)],
+#             [np.vdot(O3,A1), np.vdot(O3,A2),np.vdot(O3,A3), np.vdot(O3,A4),np.vdot(O3,O1), np.vdot(O3,O2),np.vdot(O3,O3), np.vdot(O3,O4),np.vdot(O3,S1), np.vdot(O3,S2),np.vdot(O3,S3), np.vdot(O3,S4)],
+#             [np.vdot(O4,A1), np.vdot(O4,A2),np.vdot(O4,A3), np.vdot(O4,A4),np.vdot(O4,O1), np.vdot(O4,O2),np.vdot(O4,O3), np.vdot(O4,O4),np.vdot(O4,S1), np.vdot(O4,S2),np.vdot(O4,S3), np.vdot(O4,S4)],
+#             [np.vdot(S1,A1), np.vdot(S1,A2),np.vdot(S1,A3), np.vdot(S1,A4),np.vdot(S1,O1), np.vdot(S1,O2),np.vdot(S1,O3), np.vdot(S1,O4),np.vdot(S1,S1), np.vdot(S1,S2),np.vdot(S1,S3), np.vdot(S1,S4)],
+#             [np.vdot(S2,A1), np.vdot(S2,A2),np.vdot(S2,A3), np.vdot(S2,A4),np.vdot(S2,O1), np.vdot(S2,O2),np.vdot(S2,O3), np.vdot(S2,O4),np.vdot(S2,S1), np.vdot(S2,S2),np.vdot(S2,S3), np.vdot(S2,S4)],
+#             [np.vdot(S3,A1), np.vdot(S3,A2),np.vdot(S3,A3), np.vdot(S3,A4),np.vdot(S3,O1), np.vdot(S3,O2),np.vdot(S3,O3), np.vdot(S3,O4),np.vdot(S3,S1), np.vdot(S3,S2),np.vdot(S3,S3), np.vdot(S3,S4)],
+#             [np.vdot(S4,A1), np.vdot(S4,A2),np.vdot(S4,A3), np.vdot(S4,A4),np.vdot(S4,O1), np.vdot(S4,O2),np.vdot(S4,O3), np.vdot(S4,O4),np.vdot(S4,S1), np.vdot(S4,S2),np.vdot(S4,S3), np.vdot(S4,S4)]]
 
-print(np.around(correlation,2))
+# print(np.around(correlation,2))
 
 # 4.
 # Create a matrix NN1 to recognise your three characters. It should work on all variations, so perhaps use
 # a combination/average version of the three characters. Make improvements to find best matrix. Try to
 # make it so that the matrix gives an equally high output for each input character, to make comparison easy.
 
-# NN1=create_matrix(5)
-# for r in range(5):
-#     for c in range (5):
-#         NN1[r][c]=(A1[r][c]+A2[r][c]+A3[r][c]+A4[r][c]+O1[r][c]+O2[r][c]+O3[r][c]+O4[r][c]+S1[r][c]+S2[r][c]+S3[r][c]+S4[r][c])/12
+def NeuralNetwork(input, letters_list):
+    A_NN = create_matrix(5)
+    for r in range(5):
+        for c in range(5):
+            A_NN[r][c] = (A1[r][c] + A2[r][c] + A3[r][c] + A4[r][c])/4
 
-O_NN = create_matrix(5)
-for r in range(5):
-    for c in range(5):
-        O_NN[r][c] = (O1[r][c] + O2[r][c] + O3[r][c] + O4[r][c])/4
+    O_NN = create_matrix(5)
+    for r in range(5):
+        for c in range(5):
+            O_NN[r][c] = (O1[r][c] + O2[r][c] + O3[r][c] + O4[r][c])/4
 
-S_NN = create_matrix(5)
-for r in range(5):
-    for c in range(5):
-        S_NN[r][c] = (S1[r][c] + S2[r][c] + S3[r][c] + S4[r][c])/4
+    S_NN = create_matrix(5)
+    for r in range(5):
+        for c in range(5):
+            S_NN[r][c] = (S1[r][c] + S2[r][c] + S3[r][c] + S4[r][c])/4
 
-A_NN = create_matrix(5)
-for r in range(5):
-    for c in range(5):
-        A_NN[r][c] = (A1[r][c] + A2[r][c] + A3[r][c] + A4[r][c])/4
+    NN = [A_NN, O_NN, S_NN]
+    answers_list = ['A','O','S']
 
-NN2 = [ A_NN, O_NN, S_NN]
-answers_list = ['A','O','S']
-
-values = []
-for letter in letters_list:
+    values = []
     for i in range(3):
-        values.append(np.vdot(normalize(letter),normalize(NN2[i])))
-    print(values)
-    print('Deze letter is een: ' + answers_list[np.argmax(value)])
+        values.append(np.vdot(normalize(input),normalize(NN[i])))
+
+    # setting threshold values
+    if np.max(values)>0.8:
+        if np.diff(np.sort(values)[-2:])>0.05:
+            return 'Neural network classified input as {}'.format(answers_list[np.argmax(values)])
+        else:
+            return 'Neural network could not distinguish between letters'
+    else: 
+        return "Neural network doesn't recognize input as A, O or S"
+
+
+# testing all inputs
+for letter in letters_list:
+    print(NeuralNetwork(letter,letters_list))       
+
+# 5.
+# Test your matrix on all your inputs and show the scores, for instance in bar chart. Evaluate the score:
+# does thecorrect answer indeed get the highest score? Is the difference between the scores big enough to
+# set a simple threshold value?
+
+# Threshold values added to function
+
+# 6.
+# Really test your network: make four or more inputs and use NN1 on it. Find multiple inputs (3 or
+# more) that are not correctly classified. Check what happens if you input all 1's or all zeros? 
+# Try to make an incorrectly classified character by changing only one pixel. Is thsi possible? 
+# Can you do it by only changing two pixels? Three pixels?
+
+# TODO find inputs
+
+# print(NeuralNetwork(np.ones((5,5)),letters_list))
+# print(NeuralNetwork(np.zeros((5,5)),letters_list))
+
+# 7.
+# Find multiple inputs (not all zeros) so that NN1 cannot make a decision: it gives exactly equal values 
+# for all characters. Is there a method for finding such inputs? Describe how you can create such counterexamples.
+
