@@ -134,6 +134,39 @@ S3=normalize(
 
 S4=normalize(np.matmul(S3, blur))
 
+Mattest1 = normalize(
+    np.array(
+    [[0.90, 0.87, 0.88, 0.9, 0.80],
+    [0.88, 0.08, 0.1, 0.03, 0.05],
+    [0.90, 0.88, 0.1, 0.7, 0.78],
+    [0.05, 0.04, 0.03, 0.06, 0.96],
+    [0.90, 0.79, 0.88, 0.92, 0.95]]))  #<--- This is S3 with two changed cells, one severe one slight (third row, third and fourth column). Output: ('Neural network could not distinguish between A, O or S', [0.5659186487364859, 0.9131970683479114, 0.9598313500490001]) 
+
+Mattest2 = normalize(
+    np.array(
+    [[0, 0.87, 0.88, 0.9, 0.80],
+    [0, 0.86, 0.1, 0.03, 0.05],
+    [0, 0.8, 0.1, 1.0, 0.78],
+    [0, 0.9, 0.1, 0.06, 0.96],
+    [0, 0, 0.88, 0.92, 0.95]])) #<--- Input is a thinner S with left column left blank. Output: Neural network doesn't recognize input as A, O or S. [0.6009294054798037, 0.6608644263153981, 0.7985258312293275]
+
+Mattest3 = normalize(
+    np.array(
+    [[0, 0, 0, 0, 0],
+    [0, 0.92, 0.91, 0.88, 0.87],
+    [0, 0.8, 0, 0.02, 0.93],
+    [0, 0.93, 0, 0.01, 0.99],
+    [0, 0.97, 0.84, 0.82, 1]])) #<--- Input is a smaller O with upper row and left column blank. Output: Neural network doesn't recognize input as A, O or S. -> [0.5481145336160349, 0.49868932552294776, 0.529879858890754]
+
+Mattest4 = normalize(
+    np.array(
+    [[0.05, 0.92, 0.97, 0.92, 0],
+    [0.94, 0.05, 0.00, 0.00, 0.91],
+    [0.90, 0.99, 0.98, 0.95, 0.94],
+    [1.00, 0.02, 0.09, 0.01, 0.94],
+    [0.97, 0.03, 0.01, 0.04, 0.99]])) #<---Input is a bigger A. Output: Neural network doesn't recognize input as A, O or S", [0.7538409387436332, 0.7248278879680994, 0.7820713932357782]
+
+
 letters_list = [A,A1,A2,A3,A4,O,O1,O2,O3,O4,S,S1,S2,S3,S4]
 
 # Make a correlation matrix for your inputs (12 x 12 matrix) by taking inproducts between all input values. How similar are your inputs to each other? Explain from the correlation matrix which two characters are
