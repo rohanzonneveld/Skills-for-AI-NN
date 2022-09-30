@@ -30,7 +30,7 @@ def create_blur_matrix(size):
         return blurred_matrix
 
 def normalize(matrix):
-    len=math.sqrt(np.sum(np.multiply(matrix,matrix)))
+    len=math.sqrt(np.vdot(matrix,matrix))
     return np.multiply((1/len),matrix)
 
 # 1.
@@ -46,91 +46,110 @@ def normalize(matrix):
 
 blur=create_blur_matrix(5)
 
-A =[[0, 0, 1, 0, 0],
+A =normalize(
+    np.array(
+    [[0, 0, 1, 0, 0],
     [0, 1, 0, 1, 0],
     [0, 1, 1, 1, 0],
     [1, 0, 0, 0, 1],
-    [1, 0, 0, 0, 1]]
+    [1, 0, 0, 0, 1]]))
 
 
-A1=[[0, 0, 0.5, 0, 0],
+A1=normalize(
+    np.array(
+    [[0, 0, 0.5, 0, 0],
     [0, 0.5, 0, 1, 0],
     [0, 0.5, 1, 1, 0],
     [0.5, 0, 0, 0, 1],
-    [0.5, 0, 0, 0, 1]]
+    [0.5, 0, 0, 0, 1]]))
 
-A2=np.matmul(A1,blur)
+A2=normalize(np.matmul(A1,blur))
 
-A3=[[0.05, 0.01, 0.97, 0.02, 0],
+A3=normalize(
+    np.array(
+    [[0.05, 0.01, 0.97, 0.02, 0],
     [0.04, 0.99, 0.00, 1.00, 0.01],
     [0.00, 0.99, 0.98, 0.95, 0.04],
     [1.00, 0.02, 0.09, -0.01, 0.94],
-    [0.97, 0.03, 0.01, 0.04, 0.99]]
+    [0.97, 0.03, 0.01, 0.04, 0.99]]))
 
-A4=np.matmul(A3,blur)
+A4=normalize(np.matmul(A3,blur))
 
-O=[[1, 1, 1, 1, 1],
+O=normalize(
+    np.array(
+    [[1, 1, 1, 1, 1],
    [1, 0, 0, 0, 1],
    [1, 0, 0, 0, 1],
    [1, 0, 0, 0, 1],
-   [1, 1, 1, 1, 1]]
+   [1, 1, 1, 1, 1]]))
 
-O1=[[0.5, 1, 1, 1, 1],
+O1=normalize(
+    np.array(
+    [[0.5, 1, 1, 1, 1],
    [0.5, 0, 0, 0, 0],
    [1, 0, 0, 0, 0.5],
    [1, 0, 0, 0, 0.5],
-   [1, 1, 1, 0.5, 1]]
+   [1, 1, 1, 0.5, 1]]))
 
-O2 = np.matmul(O1,blur)
+O2 = normalize(np.matmul(O1,blur))
 
-O3 = [[1, 0.9, 0.8, 0.75, 0.75],
+O3 = normalize(
+    np.array(
+    [[1, 0.9, 0.8, 0.75, 0.75],
       [0.95, 0.04, 0.01, 0, 0.87],
       [0.89, 0.01, 0, 0.02, 0.93],
       [0.86, 0.10, 0, 0.01, 0.99],
-      [0.98, 0.97, 0.84, 0.82, 1]]
+      [0.98, 0.97, 0.84, 0.82, 1]]))
 
-O4 = np.matmul(O3,blur)
+O4 = normalize(np.matmul(O3,blur))
 
-S=[[1, 1, 1, 1, 1],
+S=normalize(
+    np.array(
+    [[1, 1, 1, 1, 1],
    [1, 0, 0, 0, 0],
    [1, 1, 1, 1, 1],
    [0, 0, 0, 0, 1],
-   [1, 1, 1, 1, 1]]
+   [1, 1, 1, 1, 1]]))
 
-S1=[[0.5, 1, 1, 1, 1],
+S1=normalize(
+    np.array(
+    [[0.5, 1, 1, 1, 1],
     [0.5, 0, 0, 0, 0],
     [0.5, 1, 1, 1, 1],
     [0, 0, 0, 0, 1],
-    [0.5, 1, 1, 1, 1]]
+    [0.5, 1, 1, 1, 1]]))
 
-S2=np.matmul(S1, blur)
+S2=normalize(np.matmul(S1, blur))
 
-S3=[[0.90, 0.87, 0.88, 0.9, 0.80],
+S3=normalize(
+    np.array(
+    [[0.90, 0.87, 0.88, 0.9, 0.80],
     [0.88, 0.08, 0.1, 0.03, 0.05],
     [0.90, 0.88, 0.92, 1.0, 0.78],
     [0.05, 0.04, 0.03, 0.06, 0.96],
-    [0.90, 0.79, 0.88, 0.92, 0.95]]
+    [0.90, 0.79, 0.88, 0.92, 0.95]]))
 
-S4=np.matmul(S3, blur)
+S4=normalize(np.matmul(S3, blur))
 
+letters_list = [A,A1,A2,A3,A4,O,O1,O2,O3,O4,S,S1,S2,S3,S4]
 
 # Make a correlation matrix for your inputs (12 x 12 matrix) by taking inproducts between all input values. How similar are your inputs to each other? Explain from the correlation matrix which two characters are
 # most likely to be confused.
 
-correlation=[[np.sum(np.multiply(A1,A1)), np.sum(np.multiply(A1,A2)),np.sum(np.multiply(A1,A3)), np.sum(np.multiply(A1,A4)),np.sum(np.multiply(A1,O1)), np.sum(np.multiply(A1,O2)),np.sum(np.multiply(A1,O3)), np.sum(np.multiply(A1,O4)),np.sum(np.multiply(A1,S1)), np.sum(np.multiply(A1,S2)),np.sum(np.multiply(A1,S3)), np.sum(np.multiply(A1,S4))],
-            [np.sum(np.multiply(A2,A1)), np.sum(np.multiply(A2,A2)),np.sum(np.multiply(A2,A3)), np.sum(np.multiply(A2,A4)),np.sum(np.multiply(A2,O1)), np.sum(np.multiply(A2,O2)),np.sum(np.multiply(A2,O3)), np.sum(np.multiply(A2,O4)),np.sum(np.multiply(A2,S1)), np.sum(np.multiply(A2,S2)),np.sum(np.multiply(A2,S3)), np.sum(np.multiply(A2,S4))],
-            [np.sum(np.multiply(A3,A1)), np.sum(np.multiply(A3,A2)),np.sum(np.multiply(A3,A3)), np.sum(np.multiply(A3,A4)),np.sum(np.multiply(A3,O1)), np.sum(np.multiply(A3,O2)),np.sum(np.multiply(A3,O3)), np.sum(np.multiply(A3,O4)),np.sum(np.multiply(A3,S1)), np.sum(np.multiply(A3,S2)),np.sum(np.multiply(A3,S3)), np.sum(np.multiply(A3,S4))],
-            [np.sum(np.multiply(A4,A1)), np.sum(np.multiply(A4,A2)),np.sum(np.multiply(A4,A3)), np.sum(np.multiply(A4,A4)),np.sum(np.multiply(A4,O1)), np.sum(np.multiply(A4,O2)),np.sum(np.multiply(A4,O3)), np.sum(np.multiply(A4,O4)),np.sum(np.multiply(A4,S1)), np.sum(np.multiply(A4,S2)),np.sum(np.multiply(A4,S3)), np.sum(np.multiply(A4,S4))],
-            [np.sum(np.multiply(O1,A1)), np.sum(np.multiply(O1,A2)),np.sum(np.multiply(O1,A3)), np.sum(np.multiply(O1,A4)),np.sum(np.multiply(O1,O1)), np.sum(np.multiply(O1,O2)),np.sum(np.multiply(O1,O3)), np.sum(np.multiply(O1,O4)),np.sum(np.multiply(O1,S1)), np.sum(np.multiply(O1,S2)),np.sum(np.multiply(O1,S3)), np.sum(np.multiply(O1,S4))],
-            [np.sum(np.multiply(O2,A1)), np.sum(np.multiply(O2,A2)),np.sum(np.multiply(O2,A3)), np.sum(np.multiply(O2,A4)),np.sum(np.multiply(O2,O1)), np.sum(np.multiply(O2,O2)),np.sum(np.multiply(O2,O3)), np.sum(np.multiply(O2,O4)),np.sum(np.multiply(O2,S1)), np.sum(np.multiply(O2,S2)),np.sum(np.multiply(O2,S3)), np.sum(np.multiply(O2,S4))],
-            [np.sum(np.multiply(O3,A1)), np.sum(np.multiply(O3,A2)),np.sum(np.multiply(O3,A3)), np.sum(np.multiply(O3,A4)),np.sum(np.multiply(O3,O1)), np.sum(np.multiply(O3,O2)),np.sum(np.multiply(O3,O3)), np.sum(np.multiply(O3,O4)),np.sum(np.multiply(O3,S1)), np.sum(np.multiply(O3,S2)),np.sum(np.multiply(O3,S3)), np.sum(np.multiply(O3,S4))],
-            [np.sum(np.multiply(O4,A1)), np.sum(np.multiply(O4,A2)),np.sum(np.multiply(O4,A3)), np.sum(np.multiply(O4,A4)),np.sum(np.multiply(O4,O1)), np.sum(np.multiply(O4,O2)),np.sum(np.multiply(O4,O3)), np.sum(np.multiply(O4,O4)),np.sum(np.multiply(O4,S1)), np.sum(np.multiply(O4,S2)),np.sum(np.multiply(O4,S3)), np.sum(np.multiply(O4,S4))],
-            [np.sum(np.multiply(S1,A1)), np.sum(np.multiply(S1,A2)),np.sum(np.multiply(S1,A3)), np.sum(np.multiply(S1,A4)),np.sum(np.multiply(S1,O1)), np.sum(np.multiply(S1,O2)),np.sum(np.multiply(S1,O3)), np.sum(np.multiply(S1,O4)),np.sum(np.multiply(S1,S1)), np.sum(np.multiply(S1,S2)),np.sum(np.multiply(S1,S3)), np.sum(np.multiply(S1,S4))],
-            [np.sum(np.multiply(S2,A1)), np.sum(np.multiply(S2,A2)),np.sum(np.multiply(S2,A3)), np.sum(np.multiply(S2,A4)),np.sum(np.multiply(S2,O1)), np.sum(np.multiply(S2,O2)),np.sum(np.multiply(S2,O3)), np.sum(np.multiply(S2,O4)),np.sum(np.multiply(S2,S1)), np.sum(np.multiply(S2,S2)),np.sum(np.multiply(S2,S3)), np.sum(np.multiply(S2,S4))],
-            [np.sum(np.multiply(S3,A1)), np.sum(np.multiply(S3,A2)),np.sum(np.multiply(S3,A3)), np.sum(np.multiply(S3,A4)),np.sum(np.multiply(S3,O1)), np.sum(np.multiply(S3,O2)),np.sum(np.multiply(S3,O3)), np.sum(np.multiply(S3,O4)),np.sum(np.multiply(S3,S1)), np.sum(np.multiply(S3,S2)),np.sum(np.multiply(S3,S3)), np.sum(np.multiply(S3,S4))],
-            [np.sum(np.multiply(S4,A1)), np.sum(np.multiply(S4,A2)),np.sum(np.multiply(S4,A3)), np.sum(np.multiply(S4,A4)),np.sum(np.multiply(S4,O1)), np.sum(np.multiply(S4,O2)),np.sum(np.multiply(S4,O3)), np.sum(np.multiply(S4,O4)),np.sum(np.multiply(S4,S1)), np.sum(np.multiply(S4,S2)),np.sum(np.multiply(S4,S3)), np.sum(np.multiply(S4,S4))]]
+correlation=[[np.vdot(A1,A1), np.vdot(A1,A2),np.vdot(A1,A3), np.vdot(A1,A4),np.vdot(A1,O1), np.vdot(A1,O2),np.vdot(A1,O3), np.vdot(A1,O4),np.vdot(A1,S1), np.vdot(A1,S2),np.vdot(A1,S3), np.vdot(A1,S4)],
+            [np.vdot(A2,A1), np.vdot(A2,A2),np.vdot(A2,A3), np.vdot(A2,A4),np.vdot(A2,O1), np.vdot(A2,O2),np.vdot(A2,O3), np.vdot(A2,O4),np.vdot(A2,S1), np.vdot(A2,S2),np.vdot(A2,S3), np.vdot(A2,S4)],
+            [np.vdot(A3,A1), np.vdot(A3,A2),np.vdot(A3,A3), np.vdot(A3,A4),np.vdot(A3,O1), np.vdot(A3,O2),np.vdot(A3,O3), np.vdot(A3,O4),np.vdot(A3,S1), np.vdot(A3,S2),np.vdot(A3,S3), np.vdot(A3,S4)],
+            [np.vdot(A4,A1), np.vdot(A4,A2),np.vdot(A4,A3), np.vdot(A4,A4),np.vdot(A4,O1), np.vdot(A4,O2),np.vdot(A4,O3), np.vdot(A4,O4),np.vdot(A4,S1), np.vdot(A4,S2),np.vdot(A4,S3), np.vdot(A4,S4)],
+            [np.vdot(O1,A1), np.vdot(O1,A2),np.vdot(O1,A3), np.vdot(O1,A4),np.vdot(O1,O1), np.vdot(O1,O2),np.vdot(O1,O3), np.vdot(O1,O4),np.vdot(O1,S1), np.vdot(O1,S2),np.vdot(O1,S3), np.vdot(O1,S4)],
+            [np.vdot(O2,A1), np.vdot(O2,A2),np.vdot(O2,A3), np.vdot(O2,A4),np.vdot(O2,O1), np.vdot(O2,O2),np.vdot(O2,O3), np.vdot(O2,O4),np.vdot(O2,S1), np.vdot(O2,S2),np.vdot(O2,S3), np.vdot(O2,S4)],
+            [np.vdot(O3,A1), np.vdot(O3,A2),np.vdot(O3,A3), np.vdot(O3,A4),np.vdot(O3,O1), np.vdot(O3,O2),np.vdot(O3,O3), np.vdot(O3,O4),np.vdot(O3,S1), np.vdot(O3,S2),np.vdot(O3,S3), np.vdot(O3,S4)],
+            [np.vdot(O4,A1), np.vdot(O4,A2),np.vdot(O4,A3), np.vdot(O4,A4),np.vdot(O4,O1), np.vdot(O4,O2),np.vdot(O4,O3), np.vdot(O4,O4),np.vdot(O4,S1), np.vdot(O4,S2),np.vdot(O4,S3), np.vdot(O4,S4)],
+            [np.vdot(S1,A1), np.vdot(S1,A2),np.vdot(S1,A3), np.vdot(S1,A4),np.vdot(S1,O1), np.vdot(S1,O2),np.vdot(S1,O3), np.vdot(S1,O4),np.vdot(S1,S1), np.vdot(S1,S2),np.vdot(S1,S3), np.vdot(S1,S4)],
+            [np.vdot(S2,A1), np.vdot(S2,A2),np.vdot(S2,A3), np.vdot(S2,A4),np.vdot(S2,O1), np.vdot(S2,O2),np.vdot(S2,O3), np.vdot(S2,O4),np.vdot(S2,S1), np.vdot(S2,S2),np.vdot(S2,S3), np.vdot(S2,S4)],
+            [np.vdot(S3,A1), np.vdot(S3,A2),np.vdot(S3,A3), np.vdot(S3,A4),np.vdot(S3,O1), np.vdot(S3,O2),np.vdot(S3,O3), np.vdot(S3,O4),np.vdot(S3,S1), np.vdot(S3,S2),np.vdot(S3,S3), np.vdot(S3,S4)],
+            [np.vdot(S4,A1), np.vdot(S4,A2),np.vdot(S4,A3), np.vdot(S4,A4),np.vdot(S4,O1), np.vdot(S4,O2),np.vdot(S4,O3), np.vdot(S4,O4),np.vdot(S4,S1), np.vdot(S4,S2),np.vdot(S4,S3), np.vdot(S4,S4)]]
 
-# print(correlation)
+print(np.around(correlation,2))
 
 # 4.
 # Create a matrix NN1 to recognise your three characters. It should work on all variations, so perhaps use
@@ -157,15 +176,12 @@ for r in range(5):
     for c in range(5):
         A_NN[r][c] = (A1[r][c] + A2[r][c] + A3[r][c] + A4[r][c])/4
 
-NN2 = [O_NN, S_NN, A_NN]
-answers_list = ['O','S','A']
+NN2 = [ A_NN, O_NN, S_NN]
+answers_list = ['A','O','S']
 
-letters_list = [A,A1,A2,A3,A4,O,O1,O2,O3,O4,S,S1,S2,S3,S4]
+values = []
 for letter in letters_list:
-    max = 0
     for i in range(3):
-        value = np.sum(np.multiply(normalize(letter),normalize(NN2[i])))
-        if value > max:
-            max = value
-            idx = i
-    print('Deze letter is een: ' + answers_list[idx])
+        values.append(np.vdot(normalize(letter),normalize(NN2[i])))
+    print(values)
+    print('Deze letter is een: ' + answers_list[np.argmax(value)])
