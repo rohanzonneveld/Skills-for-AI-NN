@@ -135,6 +135,7 @@ S3=normalize(
 S4=normalize(np.matmul(S3, blur))
 
 letters_list = [A,A1,A2,A3,A4,O,O1,O2,O3,O4,S,S1,S2,S3,S4]
+
 # Make a correlation matrix for your inputs (12 x 12 matrix) by taking inproducts between all input values. How similar are your inputs to each other? Explain from the correlation matrix which two characters are
 # most likely to be confused.
 
@@ -184,16 +185,16 @@ def NeuralNetwork(input, letters_list):
     # setting threshold values
     if np.max(values)>0.8:
         if np.diff(np.sort(values)[-2:])>0.05:
-            return 'Neural network classified input as {}'.format(answers_list[np.argmax(values)])
+            return 'Neural network classified input as {}'.format(answers_list[np.argmax(values)]), values
         else:
-            return 'Neural network could not distinguish between letters'
+            return 'Neural network could not distinguish between A, O or S', values
     else: 
-        return "Neural network doesn't recognize input as A, O or S"
+        return "Neural network doesn't recognize input as A, O or S", values
 
 
 # testing all inputs
-for letter in letters_list:
-    print(NeuralNetwork(letter,letters_list))       
+# for letter in letters_list:
+#     print(NeuralNetwork(letter,letters_list))       
 
 # 5.
 # Test your matrix on all your inputs and show the scores, for instance in bar chart. Evaluate the score:
@@ -216,4 +217,4 @@ for letter in letters_list:
 # 7.
 # Find multiple inputs (not all zeros) so that NN1 cannot make a decision: it gives exactly equal values 
 # for all characters. Is there a method for finding such inputs? Describe how you can create such counterexamples.
-
+print(NeuralNetwork(A + O + S,letters_list))
