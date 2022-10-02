@@ -134,56 +134,23 @@ S3=normalize(
 
 S4=normalize(np.matmul(S3, blur))
 
-Mattest1 = normalize(
-    np.array(
-    [[0.90, 0.87, 0.88, 0.9, 0.80],
-    [0.88, 0.08, 0.1, 0.03, 0.05],
-    [0.90, 0.88, 0.1, 0.7, 0.78],
-    [0.05, 0.04, 0.03, 0.06, 0.96],
-    [0.90, 0.79, 0.88, 0.92, 0.95]]))  #<--- This is S3 with two changed cells, one severe one slight (third row, third and fourth column). Output: ('Neural network could not distinguish between A, O or S', [0.5659186487364859, 0.9131970683479114, 0.9598313500490001]) 
-
-Mattest2 = normalize(
-    np.array(
-    [[0, 0.87, 0.88, 0.9, 0.80],
-    [0, 0.86, 0.1, 0.03, 0.05],
-    [0, 0.8, 0.1, 1.0, 0.78],
-    [0, 0.9, 0.1, 0.06, 0.96],
-    [0, 0, 0.88, 0.92, 0.95]])) #<--- Input is a thinner S with left column left blank. Output: Neural network doesn't recognize input as A, O or S. [0.6009294054798037, 0.6608644263153981, 0.7985258312293275]
-
-Mattest3 = normalize(
-    np.array(
-    [[0, 0, 0, 0, 0],
-    [0, 0.92, 0.91, 0.88, 0.87],
-    [0, 0.8, 0, 0.02, 0.93],
-    [0, 0.93, 0, 0.01, 0.99],
-    [0, 0.97, 0.84, 0.82, 1]])) #<--- Input is a smaller O with upper row and left column blank. Output: Neural network doesn't recognize input as A, O or S. -> [0.5481145336160349, 0.49868932552294776, 0.529879858890754]
-
-Mattest4 = normalize(
-    np.array(
-    [[0.05, 0.92, 0.97, 0.92, 0],
-    [0.94, 0.05, 0.00, 0.00, 0.91],
-    [0.90, 0.99, 0.98, 0.95, 0.94],
-    [1.00, 0.02, 0.09, 0.01, 0.94],
-    [0.97, 0.03, 0.01, 0.04, 0.99]])) #<---Input is a bigger A. Output: Neural network doesn't recognize input as A, O or S", [0.7538409387436332, 0.7248278879680994, 0.7820713932357782]
-
-
 letters_list = [A,A1,A2,A3,A4,O,O1,O2,O3,O4,S,S1,S2,S3,S4]
 
 # Make a correlation matrix for your inputs (12 x 12 matrix) by taking inproducts between all input values. How similar are your inputs to each other? Explain from the correlation matrix which two characters are
 # most likely to be confused.
 
-# correlation=[[np.vdot(A1,A1), np.vdot(A1,A2),np.vdot(A1,A3), np.vdot(A1,A4),np.vdot(A1,O1), np.vdot(A1,O2),np.vdot(A1,O3), np.vdot(A1,O4),np.vdot(A1,S1), np.vdot(A1,S2),np.vdot(A1,S3), np.vdot(A1,S4)],
-#             [np.vdot(A2,A1), np.vdot(A2,A2),np.vdot(A2,A3), np.vdot(A2,A4),np.vdot(A2,O1), np.vdot(A2,O2),np.vdot(A2,O3), np.vdot(A2,O4),np.vdot(A2,S1), np.vdot(A2,S2),np.vdot(A2,S3), np.vdot(A2,S4)],
-#             [np.vdot(A3,A1), np.vdot(A3,A2),np.vdot(A3,A3), np.vdot(A3,A4),np.vdot(A3,O1), np.vdot(A3,O2),np.vdot(A3,O3), np.vdot(A3,O4),np.vdot(A3,S1), np.vdot(A3,S2),np.vdot(A3,S3), np.vdot(A3,S4)],
-#             [np.vdot(A4,A1), np.vdot(A4,A2),np.vdot(A4,A3), np.vdot(A4,A4),np.vdot(A4,O1), np.vdot(A4,O2),np.vdot(A4,O3), np.vdot(A4,O4),np.vdot(A4,S1), np.vdot(A4,S2),np.vdot(A4,S3), np.vdot(A4,S4)],
-#             [np.vdot(O1,A1), np.vdot(O1,A2),np.vdot(O1,A3), np.vdot(O1,A4),np.vdot(O1,O1), np.vdot(O1,O2),np.vdot(O1,O3), np.vdot(O1,O4),np.vdot(O1,S1), np.vdot(O1,S2),np.vdot(O1,S3), np.vdot(O1,S4)],
-#             [np.vdot(O2,A1), np.vdot(O2,A2),np.vdot(O2,A3), np.vdot(O2,A4),np.vdot(O2,O1), np.vdot(O2,O2),np.vdot(O2,O3), np.vdot(O2,O4),np.vdot(O2,S1), np.vdot(O2,S2),np.vdot(O2,S3), np.vdot(O2,S4)],
-#             [np.vdot(O3,A1), np.vdot(O3,A2),np.vdot(O3,A3), np.vdot(O3,A4),np.vdot(O3,O1), np.vdot(O3,O2),np.vdot(O3,O3), np.vdot(O3,O4),np.vdot(O3,S1), np.vdot(O3,S2),np.vdot(O3,S3), np.vdot(O3,S4)],
-#             [np.vdot(O4,A1), np.vdot(O4,A2),np.vdot(O4,A3), np.vdot(O4,A4),np.vdot(O4,O1), np.vdot(O4,O2),np.vdot(O4,O3), np.vdot(O4,O4),np.vdot(O4,S1), np.vdot(O4,S2),np.vdot(O4,S3), np.vdot(O4,S4)],
-#             [np.vdot(S1,A1), np.vdot(S1,A2),np.vdot(S1,A3), np.vdot(S1,A4),np.vdot(S1,O1), np.vdot(S1,O2),np.vdot(S1,O3), np.vdot(S1,O4),np.vdot(S1,S1), np.vdot(S1,S2),np.vdot(S1,S3), np.vdot(S1,S4)],
-#             [np.vdot(S2,A1), np.vdot(S2,A2),np.vdot(S2,A3), np.vdot(S2,A4),np.vdot(S2,O1), np.vdot(S2,O2),np.vdot(S2,O3), np.vdot(S2,O4),np.vdot(S2,S1), np.vdot(S2,S2),np.vdot(S2,S3), np.vdot(S2,S4)],
-#             [np.vdot(S3,A1), np.vdot(S3,A2),np.vdot(S3,A3), np.vdot(S3,A4),np.vdot(S3,O1), np.vdot(S3,O2),np.vdot(S3,O3), np.vdot(S3,O4),np.vdot(S3,S1), np.vdot(S3,S2),np.vdot(S3,S3), np.vdot(S3,S4)],
-#             [np.vdot(S4,A1), np.vdot(S4,A2),np.vdot(S4,A3), np.vdot(S4,A4),np.vdot(S4,O1), np.vdot(S4,O2),np.vdot(S4,O3), np.vdot(S4,O4),np.vdot(S4,S1), np.vdot(S4,S2),np.vdot(S4,S3), np.vdot(S4,S4)]]
+correlation=[[np.vdot(A1,A1), np.vdot(A1,A2),np.vdot(A1,A3), np.vdot(A1,A4),np.vdot(A1,O1), np.vdot(A1,O2),np.vdot(A1,O3), np.vdot(A1,O4),np.vdot(A1,S1), np.vdot(A1,S2),np.vdot(A1,S3), np.vdot(A1,S4)],
+            [np.vdot(A2,A1), np.vdot(A2,A2),np.vdot(A2,A3), np.vdot(A2,A4),np.vdot(A2,O1), np.vdot(A2,O2),np.vdot(A2,O3), np.vdot(A2,O4),np.vdot(A2,S1), np.vdot(A2,S2),np.vdot(A2,S3), np.vdot(A2,S4)],
+            [np.vdot(A3,A1), np.vdot(A3,A2),np.vdot(A3,A3), np.vdot(A3,A4),np.vdot(A3,O1), np.vdot(A3,O2),np.vdot(A3,O3), np.vdot(A3,O4),np.vdot(A3,S1), np.vdot(A3,S2),np.vdot(A3,S3), np.vdot(A3,S4)],
+            [np.vdot(A4,A1), np.vdot(A4,A2),np.vdot(A4,A3), np.vdot(A4,A4),np.vdot(A4,O1), np.vdot(A4,O2),np.vdot(A4,O3), np.vdot(A4,O4),np.vdot(A4,S1), np.vdot(A4,S2),np.vdot(A4,S3), np.vdot(A4,S4)],
+            [np.vdot(O1,A1), np.vdot(O1,A2),np.vdot(O1,A3), np.vdot(O1,A4),np.vdot(O1,O1), np.vdot(O1,O2),np.vdot(O1,O3), np.vdot(O1,O4),np.vdot(O1,S1), np.vdot(O1,S2),np.vdot(O1,S3), np.vdot(O1,S4)],
+            [np.vdot(O2,A1), np.vdot(O2,A2),np.vdot(O2,A3), np.vdot(O2,A4),np.vdot(O2,O1), np.vdot(O2,O2),np.vdot(O2,O3), np.vdot(O2,O4),np.vdot(O2,S1), np.vdot(O2,S2),np.vdot(O2,S3), np.vdot(O2,S4)],
+            [np.vdot(O3,A1), np.vdot(O3,A2),np.vdot(O3,A3), np.vdot(O3,A4),np.vdot(O3,O1), np.vdot(O3,O2),np.vdot(O3,O3), np.vdot(O3,O4),np.vdot(O3,S1), np.vdot(O3,S2),np.vdot(O3,S3), np.vdot(O3,S4)],
+            [np.vdot(O4,A1), np.vdot(O4,A2),np.vdot(O4,A3), np.vdot(O4,A4),np.vdot(O4,O1), np.vdot(O4,O2),np.vdot(O4,O3), np.vdot(O4,O4),np.vdot(O4,S1), np.vdot(O4,S2),np.vdot(O4,S3), np.vdot(O4,S4)],
+            [np.vdot(S1,A1), np.vdot(S1,A2),np.vdot(S1,A3), np.vdot(S1,A4),np.vdot(S1,O1), np.vdot(S1,O2),np.vdot(S1,O3), np.vdot(S1,O4),np.vdot(S1,S1), np.vdot(S1,S2),np.vdot(S1,S3), np.vdot(S1,S4)],
+            [np.vdot(S2,A1), np.vdot(S2,A2),np.vdot(S2,A3), np.vdot(S2,A4),np.vdot(S2,O1), np.vdot(S2,O2),np.vdot(S2,O3), np.vdot(S2,O4),np.vdot(S2,S1), np.vdot(S2,S2),np.vdot(S2,S3), np.vdot(S2,S4)],
+            [np.vdot(S3,A1), np.vdot(S3,A2),np.vdot(S3,A3), np.vdot(S3,A4),np.vdot(S3,O1), np.vdot(S3,O2),np.vdot(S3,O3), np.vdot(S3,O4),np.vdot(S3,S1), np.vdot(S3,S2),np.vdot(S3,S3), np.vdot(S3,S4)],
+            [np.vdot(S4,A1), np.vdot(S4,A2),np.vdot(S4,A3), np.vdot(S4,A4),np.vdot(S4,O1), np.vdot(S4,O2),np.vdot(S4,O3), np.vdot(S4,O4),np.vdot(S4,S1), np.vdot(S4,S2),np.vdot(S4,S3), np.vdot(S4,S4)]]
 
 # print(np.around(correlation,2))
 
@@ -242,12 +209,70 @@ def NeuralNetwork(input, letters_list):
 # Try to make an incorrectly classified character by changing only one pixel. Is thsi possible? 
 # Can you do it by only changing two pixels? Three pixels?
 
-# TODO find inputs
 
+Mattest1 = normalize(
+    np.array(
+    [[0.90, 0.87, 0.88, 0.9, 0.80],
+    [0.88, 0.08, 0.1, 0.03, 0.05],
+    [0.90, 0.88, 0.1, 0.7, 0.78],
+    [0.05, 0.04, 0.03, 0.06, 0.96],
+    [0.90, 0.79, 0.88, 0.92, 0.95]]))  #<--- This is S3 with two changed cells, one severe one slight (third row, third and fourth column). Output: ('Neural network could not distinguish between A, O or S', [0.5659186487364859, 0.9131970683479114, 0.9598313500490001]) 
+
+Mattest2 = normalize(
+    np.array(
+    [[0, 0.87, 0.88, 0.9, 0.80],
+    [0, 0.86, 0.1, 0.03, 0.05],
+    [0, 0.8, 0.1, 1.0, 0.78],
+    [0, 0.9, 0.1, 0.06, 0.96],
+    [0, 0, 0.88, 0.92, 0.95]])) #<--- Input is a thinner S with left column left blank. Output: Neural network doesn't recognize input as A, O or S. [0.6009294054798037, 0.6608644263153981, 0.7985258312293275]
+
+Mattest3 = normalize(
+    np.array(
+    [[0, 0, 0, 0, 0],
+    [0, 0.92, 0.91, 0.88, 0.87],
+    [0, 0.8, 0, 0.02, 0.93],
+    [0, 0.93, 0, 0.01, 0.99],
+    [0, 0.97, 0.84, 0.82, 1]])) #<--- Input is a smaller O with upper row and left column blank. Output: Neural network doesn't recognize input as A, O or S. -> [0.5481145336160349, 0.49868932552294776, 0.529879858890754]
+
+Mattest4 = normalize(
+    np.array(
+    [[0.05, 0.92, 0.97, 0.92, 0],
+    [0.94, 0.05, 0.00, 0.00, 0.91],
+    [0.90, 0.99, 0.98, 0.95, 0.94],
+    [1.00, 0.02, 0.09, 0.01, 0.94],
+    [0.97, 0.03, 0.01, 0.04, 0.99]])) #<---Input is a bigger A. Output: Neural network doesn't recognize input as A, O or S", [0.7538409387436332, 0.7248278879680994, 0.7820713932357782]
+
+# print(NeuralNetwork(Mattest1,letters_list))
+# print(NeuralNetwork(Mattest2,letters_list))
+# print(NeuralNetwork(Mattest3,letters_list))
+# print(NeuralNetwork(Mattest4,letters_list))
 # print(NeuralNetwork(np.ones((5,5)),letters_list))
 # print(NeuralNetwork(np.zeros((5,5)),letters_list))
 
 # 7.
 # Find multiple inputs (not all zeros) so that NN1 cannot make a decision: it gives exactly equal values 
 # for all characters. Is there a method for finding such inputs? Describe how you can create such counterexamples.
-print(NeuralNetwork(A + O + S,letters_list))
+
+
+## plot
+import matplotlib.pyplot as plt
+
+letter_name = ['A1','A2','A3','A4','O1','O2','O3','O4','S1','S2','S3','S4']
+
+for i, letter in letters_list:
+
+    plt.rcParams["figure.figsize"] = [7.5, 3.50]
+    plt.rcParams["figure.autolayout"] = True
+
+    fig, ax = plt.subplots()
+    ax.matshow(correlation, cmap='YlGn')
+
+    for i in range(5):
+        for j in range(5):
+            c = np.around(letter[j][i],2)
+            ax.text(i, j, str(c), va='center', ha='center')
+
+    plt.show()
+    filename = 'letter_{}.png'.format(letter_name[i])
+    plt.savefig(filename)
+
