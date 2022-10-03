@@ -263,22 +263,22 @@ Mattest5 = normalize(
 ## plot
 import matplotlib.pyplot as plt
 
-letter_name = ['A1','A2','A3','A4','O1','O2','O3','O4','S1','S2','S3','S4']
-
-for i, letter in letters_list:
+letter_name = ['A', 'A1','A2','A3','A4','O', 'O1','O2','O3','O4', 'S', 'S1','S2','S3','S4']
+l=0
+for letter in letters_list:
 
     plt.rcParams["figure.figsize"] = [7.5, 3.50]
     plt.rcParams["figure.autolayout"] = True
 
     fig, ax = plt.subplots()
-    ax.matshow(correlation, cmap='YlGn')
+    ax.matshow(letter, cmap='YlGn')
 
     for i in range(5):
         for j in range(5):
             c = np.around(letter[j][i],2)
             ax.text(i, j, str(c), va='center', ha='center')
 
-    plt.show()
-    filename = 'letter_{}.png'.format(letter_name[i])
+    filename = 'letter_{}.png'.format(letter_name[l])
     plt.savefig(filename)
+    l+=1
 
