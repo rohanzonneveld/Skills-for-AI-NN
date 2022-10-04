@@ -1,5 +1,6 @@
 import numpy as np
 import math
+import matplotlib.pyplot as plt
 
 def create_matrix(
         size):  # first we need a function that creates empty matrices of the size we want (np.empty is not readable)
@@ -30,17 +31,59 @@ def create_blur_matrix(size):
         return blurred_matrix
 
 def normalize(matrix):
+    # Normalize the dot product of two matrices
     len=math.sqrt(np.vdot(matrix,matrix))
     if len == 0:
         len = 1
     return np.multiply((1/len),matrix)
+
+def NeuralNetwork(A,A1,A2,A3,A4,O,O1,O2,O3,O4,S,S1,S2,S3,S4):
+    # Create a matrix by averaging the values of all variations of the letter A for location (i,j). 
+    A_NN = create_matrix(5)
+    for r in range(5):
+        for c in range(5):
+            A_NN[r][c] = (A1[r][c] + A2[r][c] + A3[r][c] + A4[r][c])/4
+
+    # Repeat for all variations of O
+    O_NN = create_matrix(5)
+    for r in range(5):
+        for c in range(5):
+            O_NN[r][c] = (O1[r][c] + O2[r][c] + O3[r][c] + O4[r][c])/4
+
+    # Repeat for all variations of S
+    S_NN = create_matrix(5)
+    for r in range(5):
+        for c in range(5):
+            S_NN[r][c] = (S1[r][c] + S2[r][c] + S3[r][c] + S4[r][c])/4
+
+    # Combine the three matrices in a list, which will be the neural network
+    NN = [A_NN, O_NN, S_NN]
+    return NN
+
+def test_NeuralNetwork(NN, input):
+
+    answers_list = ['A','O','S']
+    
+    # Check whether the neural network classifies the input as one of the letters and if yes, which one
+    values = []
+    for i in range(3):
+        values.append(np.vdot(normalize(input),normalize(NN[i])))
+
+    # setting threshold values
+    if np.max(values)>0.8:
+        if np.diff(np.sort(values)[-2:])>0.05:
+            return 'Neural network classified input as {}'.format(answers_list[np.argmax(values)]), values
+        else:
+            return 'Neural network could not distinguish between A, O or S', values
+    else: 
+        return "Neural network doesn't recognize input as A, O or S", values
 
 
 # 1.
 # Define three characters from your own name, and draw them in a 5x5 matrix. E.g.if you name is Sieuwert,
 # make SIE, or SUT, ... Be unique.
 
-# A, S, O
+# A, O, S
 
 # 2. 
 # Create four variations for each character. Make variation one of each character by redrawing it differently,
@@ -159,49 +202,13 @@ correlation=[[np.vdot(A1,A1), np.vdot(A1,A2),np.vdot(A1,A3), np.vdot(A1,A4),np.v
 # a combination/average version of the three characters. Make improvements to find best matrix. Try to
 # make it so that the matrix gives an equally high output for each input character, to make comparison easy.
 
-def NeuralNetwork(input, letters_list):
-    A_NN = create_matrix(5)
-    for r in range(5):
-        for c in range(5):
-            A_NN[r][c] = (A1[r][c] + A2[r][c] + A3[r][c] + A4[r][c])/4
-
-    O_NN = create_matrix(5)
-    for r in range(5):
-        for c in range(5):
-            O_NN[r][c] = (O1[r][c] + O2[r][c] + O3[r][c] + O4[r][c])/4
-
-    S_NN = create_matrix(5)
-    for r in range(5):
-        for c in range(5):
-            S_NN[r][c] = (S1[r][c] + S2[r][c] + S3[r][c] + S4[r][c])/4
-
-    NN = [A_NN, O_NN, S_NN]
-    answers_list = ['A','O','S']
-
-    values = []
-    for i in range(3):
-        values.append(np.vdot(normalize(input),normalize(NN[i])))
-
-    # setting threshold values
-    if np.max(values)>0.8:
-        if np.diff(np.sort(values)[-2:])>0.05:
-            return 'Neural network classified input as {}'.format(answers_list[np.argmax(values)]), values
-        else:
-            return 'Neural network could not distinguish between A, O or S', values
-    else: 
-        return "Neural network doesn't recognize input as A, O or S", values
-
-
+# Create neural network
+NN1 = NeuralNetwork(A,A1,A2,A3,A4,O,O1,O2,O3,O4,S,S1,S2,S3,S4)
 # testing all inputs
-# for letter in letters_list:
-#     print(NeuralNetwork(letter,letters_list))       
+for letter in letters_list:
+    print(test_NeuralNetwork(NN1,letter))       
 
-# 5.
-# Test your matrix on all your inputs and show the scores, for instance in bar chart. Evaluate the score:
-# does thecorrect answer indeed get the highest score? Is the difference between the scores big enough to
-# set a simple threshold value?
 
-# Threshold values added to function
 
 # 6.
 # Really test your network: make four or more inputs and use NN1 on it. Find multiple inputs (3 or
@@ -242,12 +249,14 @@ Mattest4 = normalize(
     [1.00, 0.02, 0.09, 0.01, 0.94],
     [0.97, 0.03, 0.01, 0.04, 0.99]])) #<---Input is a bigger A. Output: Neural network doesn't recognize input as A, O or S", [0.7538409387436332, 0.7248278879680994, 0.7820713932357782]
 
-# print(NeuralNetwork(Mattest1,letters_list))
-# print(NeuralNetwork(Mattest2,letters_list))
-# print(NeuralNetwork(Mattest3,letters_list))
-# print(NeuralNetwork(Mattest4,letters_list))
-# print(NeuralNetwork(np.ones((5,5)),letters_list))
-# print(NeuralNetwork(np.zeros((5,5)),letters_list))
+print(test_NeuralNetwork(NN1, Mattest1))
+print(test_NeuralNetwork(NN1, Mattest2))
+print(test_NeuralNetwork(NN1, Mattest3))
+print(test_NeuralNetwork(NN1, Mattest4))
+ones = normalize(np.ones((5,5)))
+zeroes = np.zeros((5,5))
+print(test_NeuralNetwork(NN1, ones))
+print(test_NeuralNetwork(NN1, zeroes))
 
 # 7.
 # Find multiple inputs (not all zeros) so that NN1 cannot make a decision: it gives exactly equal values 
@@ -260,25 +269,45 @@ Mattest5 = normalize(
     [0, 0, 0, 0, 0],
     [0, 0, 0, 0.0002, 0]])) #<---- Composed by trial and error. Output: "Neural network doesn't recognize input as A, O or S", [0.23789935431077322, 0.23789815898812708, 0.23786327870683213]
 
-## plot
-import matplotlib.pyplot as plt
 
-letter_name = ['A', 'A1','A2','A3','A4','O', 'O1','O2','O3','O4', 'S', 'S1','S2','S3','S4']
-l=0
-for letter in letters_list:
+# Make plots for first 15 letters
+plot = 0
+if plot == 1:
+    letter_name = ['A', 'A1','A2','A3','A4','O', 'O1','O2','O3','O4', 'S', 'S1','S2','S3','S4']
+    l=0
+    for letter in letters_list:
 
-    plt.rcParams["figure.figsize"] = [7.5, 3.50]
-    plt.rcParams["figure.autolayout"] = True
+        plt.rcParams["figure.figsize"] = [7.5, 3.50]
+        plt.rcParams["figure.autolayout"] = True
 
-    fig, ax = plt.subplots()
-    ax.matshow(letter, cmap='YlGn')
+        fig, ax = plt.subplots()
+        ax.matshow(letter, cmap='YlGn')
 
-    for i in range(5):
-        for j in range(5):
-            c = np.around(letter[j][i],2)
-            ax.text(i, j, str(c), va='center', ha='center')
+        for i in range(5):
+            for j in range(5):
+                c = np.around(letter[j][i],2)
+                ax.text(i, j, str(c), va='center', ha='center')
 
-    filename = 'letter_{}.png'.format(letter_name[l])
-    plt.savefig(filename)
-    l+=1
+        filename = 'letter_{}.png'.format(letter_name[l])
+        plt.savefig(filename)
+        l+=1
 
+# Make plots for letters from step 6 and 7
+    new_letters_list = [Mattest1,Mattest2,Mattest3,Mattest4, ones,zeroes, Mattest5]
+    conf_letter_names = ['Mattest1','Mattest2','Mattest3','Mattest4','ones','zeroes','Mattest5']
+    l = 0
+    for conf_letter in new_letters_list:
+        plt.rcParams["figure.figsize"] = [7.5, 3.50]
+        plt.rcParams["figure.autolayout"] = True
+
+        fig, ax = plt.subplots()
+        ax.matshow(conf_letter, cmap='YlGn')
+
+        for i in range(5):
+            for j in range(5):
+                c = np.around(conf_letter[j][i],2)
+                ax.text(i, j, str(c), va='center', ha='center')
+
+        filename = 'letter_{}.png'.format(conf_letter_names[l])
+        plt.savefig(filename)
+        l+=1
