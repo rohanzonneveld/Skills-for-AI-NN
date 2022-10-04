@@ -258,7 +258,7 @@ Mattest5 = normalize(
     [0, 0, 0, 0.965, 0],
     [0, 0.042, 0, 0, 0.3],
     [0, 0, 0, 0, 0],
-    [0, 0, 0, 0.0002, 0]])) #<---- Composed by trial and error. Output: "Neural network doesn't recognize input as A, O or S", [0.23789935431077322, 0.23789815898812708, 0.23786327870683213]
+    [0, 0, 0, 0.0002, 0]])) #<---- Composed by filling gaps between correlation with A_NN, O_NN and S_NN caused by filling in 1 in Mattest5. Filling gaps is done by looking at A_NN, O_NN and S_NN seperately. Output: "Neural network doesn't recognize input as A, O or S", [0.23789935431077322, 0.23789815898812708, 0.23786327870683213]
 
 ## plot
 import matplotlib.pyplot as plt
